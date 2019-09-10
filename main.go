@@ -4,9 +4,10 @@ import (
 	"flag"
 	"net/http"
 
+	"./model"
+	"./notifier"
+
 	"github.com/gin-gonic/gin"
-	"prometheus-to-webhook/model"
-	"prometheus-to-webhook/notifier"
 )
 
 var (
@@ -29,7 +30,7 @@ func main() {
 	}
 
 	router := gin.Default()
-	router.POST("/webhook", func(c *gin.Context) {
+	router.POST("/wechatwebhook", func(c *gin.Context) {
 		var notification model.Notification
 
 		err := c.BindJSON(&notification)

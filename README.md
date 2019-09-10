@@ -162,3 +162,7 @@ curl 'http://127.0.0.1:8999/webhook?key=xxxxxx-xxxxx-xxxxx-xxxxxx-xxxxxxx'  -H '
     "groupKey": "{}/{alertname=~\"^(?:test.*)$\"}:{alertname=\"test alert1\"}"
   }'
 ```
+
+
+docker build --build-arg HTTP_PROXY=http://10.99.59.113:9999 --build-arg HTTPS_PROXY=http://10.99.59.113:9999 -t alei78910/alertmanager-wechatbot-webhook:latest .
+docker push alei78910/alertmanager-wechatbot-webhook:latest

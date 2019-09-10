@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"prometheus-to-webhook/model"
-	"prometheus-to-webhook/transformer"
+	"../model"
+	"../transformer"
 )
 
 // Send send markdown message to dingtalk
