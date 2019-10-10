@@ -7,17 +7,10 @@ import (
 	"net/http"
 
 	"../model"
-	"../transformer"
 )
 
-// Send send markdown message to dingtalk
-func Send(notification model.Notification, defaultRobot string) (err error) {
-
-	markdown, robotURL, err := transformer.TransformToMarkdown(notification)
-
-	if err != nil {
-		return
-	}
+// 数据发送
+func Send(markdown *model.WeChatMarkdown, robotURL string, defaultRobot string) (err error) {
 
 	data, err := json.Marshal(markdown)
 	if err != nil {

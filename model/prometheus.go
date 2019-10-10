@@ -20,3 +20,27 @@ type Notification struct {
 	ExternalURL       string            `json:externalURL`
 	Alerts            []Alert           `json:alerts`
 }
+
+type ElastalertModel struct {
+	// Message     string        `json:"message"`
+	MessageType string        `json:"type"`
+	Source      string        `json:"source"`
+	NumMatches  int           `json:"num_matches"`
+	WeChatKey   string        `json:"wechat_key"`
+	DataMaps    ElastalertEnv `json:"data"`
+	CreatedUtc  time.Time     `json:"created_utc"`
+	UpdatedUtc  time.Time     `json:"updated_utc"`
+}
+
+type ElastalertEnv struct {
+	Host        string            `json:"host"`
+	Level       string            `json:"level"`
+	Environment ElastalertEnvData `json:"@environment"`
+}
+
+type ElastalertEnvData struct {
+	ProcessId   string            `json:"process_id"`
+	ProcessName string            `json:"process_name"`
+	CommandLine string            `json:"command_line"`
+	Data        map[string]string `json:"data"`
+}

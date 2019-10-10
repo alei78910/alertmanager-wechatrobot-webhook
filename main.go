@@ -6,6 +6,7 @@ import (
 
 	"./model"
 	"./notifier"
+	"./transformer"
 
 	"github.com/gin-gonic/gin"
 )
@@ -42,7 +43,38 @@ func main() {
 
 		RobotKey := c.DefaultQuery("key", RobotKey)
 
-		err = notifier.Send(notification, RobotKey)
+		markdown, robotURL, err := transformer.TransformToMarkdown(notification)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		}
+		err = notifier.Send(markdown, robotURL, RobotKey)
+
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+
+		}
+
+		c.JSON(http.StatusOK, gin.H{"message": "send to wechatbot successful!"})
+
+	})
+
+	router.POST("/elastalertwechat", func(c *gin.Context) {
+		var elastalert model.ElastalertModel
+
+		err := c.BindJSON(&elastalert)
+
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		RobotKey := c.DefaultQuery("key", RobotKey)
+
+		markdown, robotURL, err := transformer.ElastalertTransformToMarkdown(elastalert)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		}
+		err = notifier.Send(markdown, robotURL, RobotKey)
 
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
