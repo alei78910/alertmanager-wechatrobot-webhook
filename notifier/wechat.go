@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"../model"
+	"alertmanager-wechatrobot-webhook/model"
 )
 
 // 数据发送

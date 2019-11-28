@@ -4,9 +4,9 @@ import (
 	"flag"
 	"net/http"
 
-	"./model"
-	"./notifier"
-	"./transformer"
+	"alertmanager-wechatrobot-webhook/model"
+	"alertmanager-wechatrobot-webhook/notifier"
+	"alertmanager-wechatrobot-webhook/transformer"
 
 	"github.com/gin-gonic/gin"
 )

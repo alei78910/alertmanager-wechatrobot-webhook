@@ -164,5 +164,7 @@ curl 'http://127.0.0.1:8999/webhook?key=xxxxxx-xxxxx-xxxxx-xxxxxx-xxxxxxx'  -H '
 ```
 
 
-docker build --build-arg HTTP_PROXY=http://10.99.59.113:9999 --build-arg HTTPS_PROXY=http://10.99.59.113:9999 -t alei78910/alertmanager-wechatbot-webhook:latest .
-docker push alei78910/alertmanager-wechatbot-webhook:latest
+docker build --build-arg HTTP_PROXY=http://10.99.59.113:9999 --build-arg HTTPS_PROXY=http://10.99.59.113:9999 -t alei78910/alertmanager-wechatbot-webhook:20191129 .
+docker push alei78910/alertmanager-wechatbot-webhook:20191129
+
+docker save alei78910/alertmanager-wechatbot-webhook:20191129 > wechatbot191129.tar.gz

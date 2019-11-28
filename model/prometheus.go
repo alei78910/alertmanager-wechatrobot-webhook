@@ -33,12 +33,13 @@ type ElastalertModel struct {
 }
 
 type ElastalertEnv struct {
-	Host        string            `json:"host"`
 	Level       string            `json:"level"`
+	Message     string            `json:"message"`
 	Environment ElastalertEnvData `json:"@environment"`
 }
 
 type ElastalertEnvData struct {
+	MachineName string            `json:"machine_name"`
 	ProcessId   string            `json:"process_id"`
 	ProcessName string            `json:"process_name"`
 	CommandLine string            `json:"command_line"`
