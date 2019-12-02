@@ -25,53 +25,60 @@ func TransformToMarkdown(notification model.Notification) (markdown *model.WeCha
 	for _, alert := range notification.Alerts {
 		labels := alert.Labels
 		annotations := alert.Annotations
-		buffer.WriteString(fmt.Sprintf("\n>告警级别: %s\n", labels["severity"]))
-		buffer.WriteString(fmt.Sprintf("\n>告警类型: %s\n", labels["alertname"]))
 
-		if annotations["description"] != "" {
-			buffer.WriteString(fmt.Sprintf("\n>故障主机: %s\n", labels["instance"]))
-			buffer.WriteString(fmt.Sprintf("\n>告警主题: %s\n", annotations["summary"]))
-			buffer.WriteString(fmt.Sprintf("\n>告警详情: %s\n", annotations["description"]))
+		for k, v := range labels {
+			if v != "" {
+				switch k {
+					case "severity":
+						buffer.WriteString(fmt.Sprintf("\n>告警级别: %s\n", v))
+					case "alertname":
+						buffer.WriteString(fmt.Sprintf("\n>告警类型: %s\n", v))
+					case "instance":
+						buffer.WriteString(fmt.Sprintf("\n>故障主机: %s\n", v))
+					case "namespace":
+						buffer.WriteString(fmt.Sprintf("\n>命名空间: %s\n", v))
+					case "deployment":
+						buffer.WriteString(fmt.Sprintf("\n>部署: %s\n", v))
+					case "pod":
+						buffer.WriteString(fmt.Sprintf("\n>容器组: %s\n", v))
+					case "statefulset":
+						buffer.WriteString(fmt.Sprintf("\n>有状态副本集: %s\n", v))
+					case "daemonset":
+						buffer.WriteString(fmt.Sprintf("\n>守护进程: %s\n", v))
+					case "cronjob":
+						buffer.WriteString(fmt.Sprintf("\n>定时任务: %s\n", v))
+					case "job_name":
+						buffer.WriteString(fmt.Sprintf("\n>任务名称: %s\n", v))
+					case "resource":
+						buffer.WriteString(fmt.Sprintf("\n>资源: %s\n", v))
+					case "persistentvolumeclaim":
+						buffer.WriteString(fmt.Sprintf("\n>PVC: %s\n", v))
+					case "node":
+						buffer.WriteString(fmt.Sprintf("\n>节点: %s\n", v))
+					case "job":
+						buffer.WriteString(fmt.Sprintf("\n>任务: %s\n", v))
+					case "prometheus":
+						buffer.WriteString("")
+					default:
+						buffer.WriteString(fmt.Sprintf("\n>%s: %s\n", k, v))
+				}
+			}
 		}
-
-		if annotations["message"] != "" {
-			if labels["namespace"] != "" {
-				buffer.WriteString(fmt.Sprintf("\n>命名空间: %s\n", labels["namespace"]))
+		for k, v := range annotations {
+			if v != "" {
+				switch k {
+				case "summary":
+					buffer.WriteString(fmt.Sprintf("\n>告警主题: %s\n", v))
+				case "description":
+					buffer.WriteString(fmt.Sprintf("\n>告警详情: %s\n", v))
+				case "message":
+					buffer.WriteString(fmt.Sprintf("\n>告警详情: %s\n", v))
+				case "runbook_url":
+					buffer.WriteString("")
+				default:
+					buffer.WriteString(fmt.Sprintf("\n>%s: %s\n", k, v))
+				}
 			}
-			if labels["deployment"] != "" {
-				buffer.WriteString(fmt.Sprintf("\n>部署: %s\n", labels["deployment"]))
-			}
-			if labels["pod"] != "" {
-				buffer.WriteString(fmt.Sprintf("\n>容器组: %s\n", labels["pod"]))
-			}
-			if labels["statefulset"] != "" {
-				buffer.WriteString(fmt.Sprintf("\n>有状态副本集: %s\n", labels["statefulset"]))
-			}
-			if labels["daemonset"] != "" {
-				buffer.WriteString(fmt.Sprintf("\n>守护进程: %s\n", labels["daemonset"]))
-			}
-			if labels["cronjob"] != "" {
-				buffer.WriteString(fmt.Sprintf("\n>定时任务: %s\n", labels["cronjob"]))
-			}
-			if labels["job_name"] != "" {
-				buffer.WriteString(fmt.Sprintf("\n>任务名称: %s\n", labels["job_name"]))
-			}
-			if labels["resource"] != "" {
-				buffer.WriteString(fmt.Sprintf("\n>资源: %s\n", labels["resource"]))
-			}
-			if labels["persistentvolumeclaim"] != "" {
-				buffer.WriteString(fmt.Sprintf("\n>PVC: %s\n", labels["persistentvolumeclaim"]))
-			}
-			if labels["node"] != "" {
-				buffer.WriteString(fmt.Sprintf("\n>节点: %s\n", labels["node"]))
-			}
-			if labels["instance"] != "" {
-				buffer.WriteString(fmt.Sprintf("\n>实例: %s\n", labels["instance"]))
-			}
-			if labels["job"] != "" {
-				buffer.WriteString(fmt.Sprintf("\n>任务: %s\n", labels["job"]))
-			}
-			buffer.WriteString(fmt.Sprintf("\n>告警详情: %s\n", annotations["message"]))
 		}
 
 		buffer.WriteString(fmt.Sprintf("\n>触发时间: %s\n", alert.StartsAt.Add(8*time.Hour).Format("2006-01-02 15:04:05")))

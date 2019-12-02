@@ -34,7 +34,7 @@ func main() {
 	router.POST("/wechatwebhook", func(c *gin.Context) {
 		var notification model.Notification
 
-		err := c.BindJSON(&notification)
+		err := c.ShouldBindJSON(&notification)
 
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -61,7 +61,7 @@ func main() {
 	router.POST("/elastalertwechat", func(c *gin.Context) {
 		var elastalert model.ElastalertModel
 
-		err := c.BindJSON(&elastalert)
+		err := c.ShouldBindJSON(&elastalert)
 
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
