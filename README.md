@@ -165,9 +165,9 @@ curl 'http://127.0.0.1:8999/webhook?key=xxxxxx-xxxxx-xxxxx-xxxxxx-xxxxxxx'  -H '
 
 CGO_ENABLED=0 GOOS=linux go build -a -ldflags '-extldflags "-static"' -o main .
 
-docker build --build-arg HTTP_PROXY=http://10.99.59.113:9999 --build-arg HTTPS_PROXY=http://10.99.59.113:9999 -t alei78910/alertmanager-wechatbot-webhook:20191202 .
+docker build --build-arg HTTP_PROXY=http://10.99.59.113:9999 --build-arg HTTPS_PROXY=http://10.99.59.113:9999 -t alei78910/alertmanager-wechatbot-webhook:20191203 .
 
-docker build -t alei78910/alertmanager-wechatbot-webhook:20191202 .
-docker push alei78910/alertmanager-wechatbot-webhook:20191202
+docker build -t alei78910/alertmanager-wechatbot-webhook:20191203 .
+docker push alei78910/alertmanager-wechatbot-webhook:20191203
 
-docker save alei78910/alertmanager-wechatbot-webhook:20191202 > wechatbot20191202.tar.gz
+docker save alei78910/alertmanager-wechatbot-webhook:20191203 > wechatbot20191203.tar.gz

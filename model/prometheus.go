@@ -22,7 +22,7 @@ type Notification struct {
 }
 
 type ElastalertModel struct {
-	// Message     string        `json:"message"`
+	Message     string        `json:"message"`
 	MessageType string        `json:"type"`
 	Source      string        `json:"source"`
 	NumMatches  int           `json:"num_matches"`

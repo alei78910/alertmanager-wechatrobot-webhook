@@ -113,8 +113,13 @@ func ElastalertTransformToMarkdown(elastalert model.ElastalertModel) (markdown *
 	buffer.WriteString(fmt.Sprintf("\n>环境进程ID: %s\n", datamap.Environment.ProcessId))
 	buffer.WriteString(fmt.Sprintf("\n>执行命令: %s\n", datamap.Environment.CommandLine))
 	buffer.WriteString(fmt.Sprintf("\n>触发时间: %s\n", elastalert.CreatedUtc.Add(8*time.Hour).Format("2006-01-02 15:04:05")))
-	if datamap.Message != "" {
-		res0 := strings.Replace(datamap.Message, "\n", "", -1)
+	res0 := elastalert.Message
+	if res0 == "" {
+		res0 = datamap.Message
+	}
+	if res0 != "" {
+		res0 = strings.Replace(res0, "\r", "", -1)
+		res0 = strings.Replace(res0, "\n", " ", -1)
 		length := len(res0)
 		if length > 1024 {
 			length = 1024
