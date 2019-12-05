@@ -23,6 +23,7 @@ type Notification struct {
 
 type ElastalertModel struct {
 	Message     string        `json:"message"`
+	Error       ErrorMessages        `json:"error"`
 	MessageType string        `json:"type"`
 	Source      string        `json:"source"`
 	NumMatches  int           `json:"num_matches"`
@@ -32,6 +33,9 @@ type ElastalertModel struct {
 	UpdatedUtc  time.Time     `json:"updated_utc"`
 }
 
+type ErrorMessages struct {
+	Message       []string            `json:"message"`
+}
 type ElastalertEnv struct {
 	Level       string            `json:"level"`
 	Message     string            `json:"message"`

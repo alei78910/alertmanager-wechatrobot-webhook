@@ -117,6 +117,9 @@ func ElastalertTransformToMarkdown(elastalert model.ElastalertModel) (markdown *
 	if res0 == "" {
 		res0 = datamap.Message
 	}
+	if elastalert.Error.Message != nil && len(elastalert.Error.Message) > 0 {
+		res0 = strings.Join(elastalert.Error.Message, ",")
+	}
 	if res0 != "" {
 		res0 = strings.Replace(res0, "\r", "", -1)
 		res0 = strings.Replace(res0, "\n", " ", -1)
