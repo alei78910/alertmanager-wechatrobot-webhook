@@ -1,12 +1,12 @@
 package transformer
 
 import (
+	"alertmanager-wechatrobot-webhook/model"
 	"bytes"
 	"fmt"
 	"strconv"
 	"strings"
 	"time"
-	"alertmanager-wechatrobot-webhook/model"
 )
 
 // TransformToMarkdown transform alertmanager notification to wechat markdow message
@@ -29,38 +29,38 @@ func TransformToMarkdown(notification model.Notification) (markdown *model.WeCha
 		for k, v := range labels {
 			if v != "" {
 				switch k {
-					case "severity":
-						buffer.WriteString(fmt.Sprintf("\n>告警级别: %s\n", v))
-					case "alertname":
-						buffer.WriteString(fmt.Sprintf("\n>告警类型: %s\n", v))
-					case "instance":
-						buffer.WriteString(fmt.Sprintf("\n>故障主机: %s\n", v))
-					case "namespace":
-						buffer.WriteString(fmt.Sprintf("\n>命名空间: %s\n", v))
-					case "deployment":
-						buffer.WriteString(fmt.Sprintf("\n>部署: %s\n", v))
-					case "pod":
-						buffer.WriteString(fmt.Sprintf("\n>容器组: %s\n", v))
-					case "statefulset":
-						buffer.WriteString(fmt.Sprintf("\n>有状态副本集: %s\n", v))
-					case "daemonset":
-						buffer.WriteString(fmt.Sprintf("\n>守护进程: %s\n", v))
-					case "cronjob":
-						buffer.WriteString(fmt.Sprintf("\n>定时任务: %s\n", v))
-					case "job_name":
-						buffer.WriteString(fmt.Sprintf("\n>任务名称: %s\n", v))
-					case "resource":
-						buffer.WriteString(fmt.Sprintf("\n>资源: %s\n", v))
-					case "persistentvolumeclaim":
-						buffer.WriteString(fmt.Sprintf("\n>PVC: %s\n", v))
-					case "node":
-						buffer.WriteString(fmt.Sprintf("\n>节点: %s\n", v))
-					case "job":
-						buffer.WriteString(fmt.Sprintf("\n>任务: %s\n", v))
-					case "prometheus":
-						buffer.WriteString("")
-					default:
-						buffer.WriteString(fmt.Sprintf("\n>%s: %s\n", k, v))
+				case "severity":
+					buffer.WriteString(fmt.Sprintf("\n>告警级别: %s\n", v))
+				case "alertname":
+					buffer.WriteString(fmt.Sprintf("\n>告警类型: %s\n", v))
+				case "instance":
+					buffer.WriteString(fmt.Sprintf("\n>故障主机: %s\n", v))
+				case "namespace":
+					buffer.WriteString(fmt.Sprintf("\n>命名空间: %s\n", v))
+				case "deployment":
+					buffer.WriteString(fmt.Sprintf("\n>部署: %s\n", v))
+				case "pod":
+					buffer.WriteString(fmt.Sprintf("\n>容器组: %s\n", v))
+				case "statefulset":
+					buffer.WriteString(fmt.Sprintf("\n>有状态副本集: %s\n", v))
+				case "daemonset":
+					buffer.WriteString(fmt.Sprintf("\n>守护进程: %s\n", v))
+				case "cronjob":
+					buffer.WriteString(fmt.Sprintf("\n>定时任务: %s\n", v))
+				case "job_name":
+					buffer.WriteString(fmt.Sprintf("\n>任务名称: %s\n", v))
+				case "resource":
+					buffer.WriteString(fmt.Sprintf("\n>资源: %s\n", v))
+				case "persistentvolumeclaim":
+					buffer.WriteString(fmt.Sprintf("\n>PVC: %s\n", v))
+				case "node":
+					buffer.WriteString(fmt.Sprintf("\n>节点: %s\n", v))
+				case "job":
+					buffer.WriteString(fmt.Sprintf("\n>任务: %s\n", v))
+				case "prometheus":
+					buffer.WriteString("")
+				default:
+					buffer.WriteString(fmt.Sprintf("\n>%s: %s\n", k, v))
 				}
 			}
 		}
@@ -113,11 +113,22 @@ func ElastalertTransformToMarkdown(elastalert model.ElastalertModel) (markdown *
 	buffer.WriteString(fmt.Sprintf("\n>环境进程ID: %s\n", datamap.Environment.ProcessId))
 	buffer.WriteString(fmt.Sprintf("\n>执行命令: %s\n", datamap.Environment.CommandLine))
 	buffer.WriteString(fmt.Sprintf("\n>触发时间: %s\n", elastalert.CreatedUtc.Add(8*time.Hour).Format("2006-01-02 15:04:05")))
-	res0 := elastalert.Message
-	if res0 == "" {
-		res0 = datamap.Message
+	if datamap.ExtendedData != nil {
+		buffer.WriteString("\n>环境变量: ")
+		for k, v := range datamap.ExtendedData {
+			if v != "" {
+				buffer.WriteString(fmt.Sprintf("%s: %s，", k, v))
+			}
+		}
+		buffer.WriteString("\n")
 	}
-	if elastalert.Error.Message != nil && len(elastalert.Error.Message) > 0 {
+
+	res0 := elastalert.Message
+	res1 := datamap.Message
+	if res0 != res1 && len(res1) > len(res0) {
+		res0 = res1
+	}
+	if elastalert.Error.Message != nil && len(elastalert.Error.Message) > 1 && elastalert.Error.Message[0] != elastalert.Error.Message[1] {
 		res0 = strings.Join(elastalert.Error.Message, ",")
 	}
 	if res0 != "" {
